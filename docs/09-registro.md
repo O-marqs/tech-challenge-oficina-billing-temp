@@ -44,3 +44,45 @@ Publicação documental confirmada: commit `5b4d88a5570917734fe927673e9424a42a9e
 [PR #1 em rascunho](https://github.com/O-marqs/tech-challenge-oficina-billing-temp/pull/1),
 sem merge. Árvore remota e leitura de AGENTS.md conferidas após publicação.
 Verificação local: links internos e whitespace válidos; nenhuma alegação de teste funcional.
+
+## 05/11/2026 — Implementação acelerada autorizada
+
+Criada branch feat/billing-mvp-local a partir da documentação publicada. Implementados API,
+JWT cliente, catálogo, PostgreSQL/SQLite, Alembic, inbox/outbox, SQS FIFO, operações duráveis,
+provider fake e adapter de testes Mercado Pago Orders. Primeiro resultado local: 62 PASS,
+3 SKIP PostgreSQL e cobertura 96,98%. Demonstração isolada e migrations executadas.
+Conferir docs/11-implementacao.md para limitações e resultados posteriores de CI.
+
+### Validação final da implementação funcional
+
+Código validado no commit remoto e7f668df37324c902a0140cc32cea73fb24d7bcf.
+Run 42110862161: 73 PASS, 96,92% incluindo CLI, nenhum SKIP; Ruff/formato/Bandit,
+Alembic upgrade/check, auditoria de dependências e Docker passaram. Smoke de containers
+com API/workers/PostgreSQL/LocalStack completou confirmação fake explícita, estorno e
+cancelamento. Nenhuma evidência de integração real MP, stack OS/Execution ou deploy.
+PR #2 continua em rascunho, sem merge. Próxima tarefa depende de credenciais de TESTE MP
+e dos ajustes de integração já registrados no grupo.
+
+## 05/11/2026 — Revisão adicional e separação das pendências
+
+Reconfirmados os HEADs OS/Auth/Execution. Saga avançou para
+3a5c61f7cb1c9625834a17efe4fa748e15d359b0, corrigindo filas por destinatário (A-07).
+Execution ainda tem implementação em feat/execution-service, 34fa9a67859f63123e3a51eefa1699026279ec61;
+não confundir main inicial com ausência de desenvolvimento na branch.
+
+Corrigido adapter Orders: confirmação exige ID da transação; estorno confere BRL, referência,
+total e transação antes da chamada. Reembolso integral usa body vazio conforme a API e exige
+refunds processados com IDs únicos, transação e soma integral para emitir PagamentoEstornado.
+Resposta incompleta permanece pendente; não cancela orçamento como se tivesse compensado.
+MERCADO_PAGO_RETURN_URL agora é enviada em config.online; callback é configurado no painel.
+
+Acrescentadas 20 regressões. Local Python 3.12: 90 PASS, 3 SKIP PostgreSQL, cobertura 97,38%;
+Ruff/formato/Bandit, demo e diff check passaram. CI Python 3.11/PostgreSQL 16:
+93 PASS, sem SKIP, 97,25%; build Docker, auditoria sem vulnerabilidades conhecidas nos pacotes
+consultados, migrations/drift e stack Billing com PostgreSQL/SQS LocalStack passaram.
+Commit funcional remoto ebd919fb1826c088c51407d113657ec15f271377,
+[run 42120591700](https://github.com/O-marqs/tech-challenge-oficina-billing-temp/actions/runs/42120591700).
+
+Criado docs/12-proximos-passos-e-alinhamentos.md com matriz de responsáveis, perguntas objetivas,
+fontes atuais do provedor e roteiro de sandbox. Atualizados plano, causa HTTP e handoff para refletir
+o código existente. Sem alteração em repo do grupo, segredo, transação real, merge, deploy ou gasto contratado.

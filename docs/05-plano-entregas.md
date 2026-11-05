@@ -1,8 +1,23 @@
 # Plano de entregas do Lucas
 
 Data base: 05/11/2026. Entregas pequenas, sem substituir trabalho dos outros responsáveis.
-Status inicial de todas as tarefas funcionais: NÃO INICIADA. PR-01 é a entrega documental atual.
+O plano abaixo foi criado antes do código. Estado atualizado da entrega acelerada:
 Os números abaixo são rótulos de planejamento, não números reais de PR no GitHub.
+O código está no PR real #2, branch feat/billing-mvp-local.
+
+| Área do plano | Estado da implementação atual |
+|---|---|
+| PR-01 | Documentação publicada |
+| PR-02 | Esqueleto/API/configuração/build e CI executados |
+| PR-03 | Persistência, inbox/outbox e SQS implementados; PostgreSQL/containers validados no CI |
+| PR-04 | Orçamento e autorização de cliente implementados; catálogo sintético configurável |
+| PR-05 | Fluxo fake explícito, retry, confirmação e compensação implementados e demonstrados |
+| PR-06 | Adapter Orders e webhook com mocks; teste na conta Mercado Pago ainda pendente |
+| PR-07 | JWT cliente implementado; identidade atendente e ajustes Auth/OS pendentes |
+| PR-08 | Billing em containers validado; stack completa do grupo e BDD pendentes |
+| PR-09 | CI/build e templates K8s; sem CD/deploy ou proteção alterada |
+| PR-10 | Evidências técnicas atualizadas; vídeo/PDF do grupo pendentes |
+
 
 | Entrega | Conteúdo | Critério de aceite | Dependências |
 |---|---|---|---|
@@ -20,16 +35,13 @@ Os números abaixo são rótulos de planejamento, não números reais de PR no G
 É possível antecipar o validador JWT cliente do PR-07 durante PR-04; não precisa esperar Mercado Pago.
 Não prometer prazo por PR antes de conhecer disponibilidade do Lucas/ambiente e alinhamentos.
 
-## Primeira tarefa executável
+## Próxima tarefa executável
 
-**PR-02: esqueleto local do Billing.** Usar o repo temporário
-`O-marqs/tech-challenge-oficina-billing-temp` e partir da documentação em
-`docs/fase4-lucas-planejamento`; registrar essa dependência até sua integração.
-O repo temporário já tem acesso de escrita verificado. Não é necessário resolver a escrita
-no destino do Hélio para implementar e testar aqui. Migrar conforme `10-migracao-github.md`.
-Começar com health/config/ports e estrutura de banco, testes reais desses comportamentos,
-sem implementar preço, atendente ou integração financeira pendentes.
-Publicar comandos efetivamente utilizáveis no README junto com o código.
+O esqueleto e o fluxo Billing já estão implementados no PR real #2. Não recomeçar PR-02.
+Seguir [pendências e roteiro de integração](12-proximos-passos-e-alinhamentos.md): fechar payloads
+OS e identidades com o grupo; configurar a aplicação Mercado Pago de testes e callback HTTPS;
+executar o sandbox e BDD com os serviços. Instrumentação de spans e configuração da entrega
+também continuam pendentes de desenvolvimento. Migrar conforme `10-migracao-github.md`.
 
 ## Verificação funcional que precisa existir
 

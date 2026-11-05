@@ -1,0 +1,16 @@
+{
+  "messageId": "b0a39859-8d89-4cb3-9673-8a0e8f602654",
+  "type": "GerarOrcamento",
+  "version": 1,
+  "sagaId": "291be3b9-8b0d-583e-94c1-f9d2ae911fb3",
+  "osId": 101,
+  "causationId": null,
+  "requestId": "req-demo-billing-101",
+  "occurredAt": "2026-11-05T20:00:00Z",
+  "payload": {
+    "clienteId": 7,
+    "veiculoId": 15,
+    "servicos": [{"servicoId": 12, "quantidade": 1}],
+    "pecas": [{"pecaId": 40, "quantidade": 2}]
+  }
+}

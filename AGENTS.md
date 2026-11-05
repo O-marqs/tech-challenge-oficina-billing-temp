@@ -5,7 +5,8 @@
 Leia `README.md`, `docs/08-continuidade.md`, `docs/07-decisoes-pendencias.md`,
 `docs/04-contratos-integracao.md` e o plano da tarefa em `docs/05-plano-entregas.md`.
 Confira a branch e os HEADs atuais antes de implementar. Não dependa da memória do chat.
-Esta documentação contém plano e evidência de leitura, não uma implementação pronta.
+Leia também docs/12-proximos-passos-e-alinhamentos.md para responsáveis, perguntas ao grupo e roteiro sandbox.
+Há agora implementação inicial executável em feat/billing-mvp-local. Leia docs/11-implementacao.md para evidências e limites; plano não equivale a validação integrada.
 Repositório atual: `O-marqs/tech-challenge-oficina-billing-temp`, branch documental
 `docs/fase4-lucas-planejamento`. Referência atual de desenvolvimento: arquivos Git desta branch.
 Destino final: `helyomendesdev/tech-challenge-oficina-billing`; push para ele falhou com 403.
@@ -58,9 +59,16 @@ Esta autorização não permite enviar mensagens ao grupo, emails ou convites.
 
 ## Verificação e encerramento
 
-Não existem comandos de teste do Billing ainda. Não invente resultados nem declare 80% sem medição.
+Comandos reproduzíveis estão no README; use uv sync --frozen --extra dev. Não invente resultados de CI, PostgreSQL, MP real ou cobertura.
 Ao criar o esqueleto, documente comandos reproduzíveis para lint, formato, testes, cobertura,
 contratos, migrations, build e integração PostgreSQL/SQS local.
 Depois de cada entrega, atualize `docs/09-registro.md`, `docs/08-continuidade.md`, os status
 do plano e as decisões; inclua SHA, comandos executados, resultados reais e limitações.
 Mantenha separado: planejado, implementado, teste local, CI e validação integrada real.
+
+## Autonomia de implementação atualizada
+
+Lucas autorizou acelerar o desenvolvimento com escolhas locais reversíveis em 05/11/2026.
+Catálogo sintético configurável, provider fake explícito, causa HTTP ancorada em OrcamentoGerado
+e rejeição de orçamento zero são decisões documentadas em docs/11-implementacao.md.
+Isso não autoriza mudar contratos alheios, habilitar pagamentos reais, fazer deploy ou merge.

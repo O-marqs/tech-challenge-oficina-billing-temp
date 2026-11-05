@@ -1,3 +1,10 @@
+# Atualização de implementação
+
+Lucas autorizou avançar autonomamente em 05/11. P-01/P-02/P-04/P-07 têm escolhas locais reversíveis
+para o MVP, registradas em docs/11-implementacao.md: catálogo demo configurável, GET do link,
+causa em OrcamentoGerado e rejeição de total zero. Precisam de alinhamento do grupo antes do aceite
+integrado. Credenciais MP e perfil atendente continuam pendentes. Registro inicial segue abaixo.
+
 # Decisões e pendências
 
 Cada decisão distingue fato do contrato, direção local de planejamento e proposta que depende
@@ -33,12 +40,13 @@ do grupo. Nenhuma proposta daqui altera automaticamente um repo alheio.
 | P-11 | Ajustes de compose e driver, fixture de preços/clientes, cenário de falha e checkout controlado | Luís/Hélio/Lucas/Sophia | BDD stack real e coleta de evidências |
 | P-12 | Destino K8s, recursos gratuitos/academia, callback HTTPS e quotas New Relic/Sonar | Grupo; Sophia/Hélio na infra | Deploy e observabilidade remotos |
 
-## Próxima pergunta ao Lucas
+## Próximo alinhamento com Lucas e grupo
 
-Primeiro confirmar P-01, pois isso define a regra central do orçamento. A recomendação é
-catálogo próprio simples no Billing, inicialmente alimentado com dados sintéticos de demonstração,
-sem ler tabelas do OS. Perguntar também se já há conta/app de testes Mercado Pago (não pedir tokens
-no chat). Perfil atendente e contratos que envolvem o grupo devem continuar registrados até alinhamento.
+O catálogo próprio sintético já permite desenvolvimento local, autorizado pelo Lucas. Confirmar
+essa escolha com o grupo para a demonstração integrada. Providenciar aplicação Mercado Pago
+no modo Teste com configuração protegida e callback HTTPS; não pedir tokens no chat.
+Priorizar também payloads do OS, identidade atendente e cenários Execution/BDD, conforme
+[matriz atual](12-proximos-passos-e-alinhamentos.md). A-07 (filas separadas) foi resolvido upstream.
 
 Não suspender elaboração de documentação nem esqueleto independente por credencial ainda ausente.
 Não implementar regras dependentes de respostas ausentes. Se o usuário direcionar outra solução,

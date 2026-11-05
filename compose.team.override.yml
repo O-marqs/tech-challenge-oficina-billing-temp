@@ -1,0 +1,66 @@
+# Use only together with the Saga repo compose, from the Billing checkout:
+# docker compose -f ../tech-challenge-oficina-saga/stack/docker-compose.yml \
+#   -f compose.team.override.yml config
+# Set BILLING_BUILD_CONTEXT to this checkout's absolute path.
+# This wiring proposal does not fix the OS payload/BDD/Execution gaps by itself.
+services:
+  os:
+    environment:
+      DB_HOST: postgres-os
+      SAGA_BILLING_QUEUE_URL: http://localstack:4566/000000000000/oficina-billing-comandos.fifo
+      SAGA_EXECUTION_QUEUE_URL: http://localstack:4566/000000000000/oficina-execucao-comandos.fifo
+  os-consumidor:
+    environment:
+      DB_HOST: postgres-os
+      SAGA_BILLING_QUEUE_URL: http://localstack:4566/000000000000/oficina-billing-comandos.fifo
+      SAGA_EXECUTION_QUEUE_URL: http://localstack:4566/000000000000/oficina-execucao-comandos.fifo
+  billing:
+    build: ${BILLING_BUILD_CONTEXT:?Set absolute Billing checkout path}
+    image: oficina-billing:local
+    environment: &billing-team-env
+      APP_ENV: development
+      PAYMENT_PROVIDER: fake
+      DATABASE_URL: postgresql+psycopg://${POSTGRES_BILLING_USER:-billing}:${POSTGRES_BILLING_PASSWORD:-billing}@postgres-billing:5432/${POSTGRES_BILLING_DB:-billing}
+      AUTH_JWT_PUBLIC_KEY_B64: ${AUTH_JWT_PUBLIC_KEY_B64:-}
+      AWS_REGION: us-east-1
+      AWS_ENDPOINT_URL: http://localstack:4566
+      AWS_ACCESS_KEY_ID: test
+      AWS_SECRET_ACCESS_KEY: test
+      QUEUE_BILLING_COMANDOS_URL: http://localstack:4566/000000000000/oficina-billing-comandos.fifo
+      QUEUE_OS_SAGA_RESPOSTAS_URL: http://localstack:4566/000000000000/oficina-os-saga-respostas.fifo
+    depends_on:
+      billing-migrate:
+        condition: service_completed_successfully
+  billing-migrate:
+    build: ${BILLING_BUILD_CONTEXT:?Set absolute Billing checkout path}
+    image: oficina-billing:local
+    command: [python, -m, billing_service.cli, migrate]
+    environment: *billing-team-env
+    depends_on:
+      postgres-billing:
+        condition: service_healthy
+  billing-consumer:
+    build: ${BILLING_BUILD_CONTEXT:?Set absolute Billing checkout path}
+    command: [python, -m, billing_service.cli, consume]
+    environment: *billing-team-env
+    depends_on:
+      billing-migrate:
+        condition: service_completed_successfully
+      criar-filas:
+        condition: service_completed_successfully
+  billing-operations:
+    build: ${BILLING_BUILD_CONTEXT:?Set absolute Billing checkout path}
+    command: [python, -m, billing_service.cli, operations]
+    environment: *billing-team-env
+    depends_on:
+      billing-migrate:
+        condition: service_completed_successfully
+  billing-relay:
+    build: ${BILLING_BUILD_CONTEXT:?Set absolute Billing checkout path}
+    command: [python, -m, billing_service.cli, relay]
+    environment: *billing-team-env
+    depends_on:
+      billing-migrate:
+        condition: service_completed_successfully
+      criar-filas:
+        condition: service_completed_successfully

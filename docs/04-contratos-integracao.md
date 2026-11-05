@@ -59,15 +59,16 @@ Ver A-01 a A-15 da [auditoria](01-auditoria.md). Prioridades:
    é snapshot de preços em nova versão/contrato aprovado ou API de catálogo do responsável.
 2. **Payloads OS**: persistir total e itens no orquestrador para comandos válidos; não alterar
    eventos de aprovação/confirmado para carregarem campos que o schema proíbe.
-3. **Causa de eventos HTTP**: aprovar/recusar não chega por comando SQS novo; acordar causationId
-   e requestId com Luís. Proposta: ID durável da ação HTTP como causa, requestId da Saga preservado,
-   sem mutar o envelope compartilhado. Não tornar isso norma antes de alinhar.
+3. **Causa de eventos HTTP**: a implementação local usa messageId de OrcamentoGerado persistido
+   como causationId e preserva requestId da Saga. Confirmar esse acordo com Luís antes do aceite
+   integrado; a proposta inicial de criar um ID de ação HTTP não foi adotada.
 4. **Checkout**: link via GET Billing resolve a questão aberta sem mensagem `PagamentoCriado`.
    É decisão local recomendada; atualizar a questão no repo Saga por PR separado quando acordado.
 5. **Auth atendente e cliente ativo**: definir emissão/verificação do atendente e necessidade
    de status ativo sem leitura de banco externo. Chave pública não resolve revogação imediata.
-6. **Stack real**: mapear DB_HOST, filas separadas, migrations, worker/relay Billing e tokens
-   distintos do BDD. Não marcar stack pronta ao apenas adicionar Dockerfile.
+6. **Stack real**: mapear DB_HOST, migrations, worker/relay Billing e tokens distintos do BDD.
+   As filas separadas já foram corrigidas no Saga em 3a5c61f7cb1c9625834a17efe4fa748e15d359b0.
+   Não marcar stack pronta ao apenas adicionar Dockerfile.
 7. **Orçamento zero**: schema de orçamento permite zero, de pagamento não. Necessário decidir
    política sem fabricar cobrança. Testes devem registrar o limite.
 
