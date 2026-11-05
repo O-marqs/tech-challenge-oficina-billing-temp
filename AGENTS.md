@@ -5,6 +5,7 @@
 Leia `README.md`, `docs/08-continuidade.md`, `docs/07-decisoes-pendencias.md`,
 `docs/04-contratos-integracao.md` e o plano da tarefa em `docs/05-plano-entregas.md`.
 Confira a branch e os HEADs atuais antes de implementar. Não dependa da memória do chat.
+Leia também docs/12-proximos-passos-e-alinhamentos.md para responsáveis, perguntas ao grupo e roteiro sandbox.
 Há agora implementação inicial executável em feat/billing-mvp-local. Leia docs/11-implementacao.md para evidências e limites; plano não equivale a validação integrada.
 Repositório atual: `O-marqs/tech-challenge-oficina-billing-temp`, branch documental
 `docs/fase4-lucas-planejamento`. Referência atual de desenvolvimento: arquivos Git desta branch.

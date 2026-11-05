@@ -31,6 +31,8 @@ integração de containers. Próximos commits apenas documentais não substituem
 
 ## Próximos passos úteis
 
+- Começar por docs/12-proximos-passos-e-alinhamentos.md: separa ações Lucas/desenvolvimento/grupo,
+  registra A-07 já resolvido e detalha o roteiro de teste Mercado Pago sem segredos.
 - Configurar conta/aplicação/credenciais de TESTE Mercado Pago e callback HTTPS; provar cobrança,
   recusa e estorno reais no ambiente de testes. Nunca solicitar tokens pelo chat.
 - Alinhar com Hélio/Luís os payloads incompletos do orquestrador, os dados/tokens do BDD e o mapeamento
@@ -56,3 +58,13 @@ Credenciais, transações reais, Terraform apply, merge, deploy e mensagens ao g
 > O serviço já executa localmente; não recomece do zero e não trate o plano inicial como implementação pendente.
 > Avance nas dependências reais do grupo e no teste Mercado Pago após configuração segura do ambiente.
 > Preserve schemas/JWT/bancos separados, não faça merge ou deploy e atualize este handoff com evidências.
+
+## Revisão adicional validada
+
+Commit funcional `ebd919fb1826c088c51407d113657ec15f271377`,
+[CI 42120591700](https://github.com/O-marqs/tech-challenge-oficina-billing-temp/actions/runs/42120591700):
+**93 PASS, sem SKIP, 97,25%** de cobertura incluindo CLI, com PostgreSQL 16.
+Build Docker, migrations/drift, Ruff/formato/Bandit, auditoria de dependências e fluxo em containers
+com PostgreSQL/LocalStack passaram. Vinte regressões adicionais; reembolso parcial/incompleto
+não libera PagamentoEstornado nem CancelarOrcamento. Retorno HTTPS configurado enviado à order.
+Nenhum teste autenticado no Mercado Pago; a revisão não elimina as dependências acima.

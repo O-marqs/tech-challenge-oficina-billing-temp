@@ -51,6 +51,11 @@
       "id": "26542081",
       "title": "Fase 4 Lucas — AGENTS e instruções para IA",
       "url": "https://marqs.atlassian.net/wiki/spaces/~7120204dc1d32324e343dcad205794dd624c7c/pages/26542081/Fase+4+Lucas+AGENTS+e+instru+es+para+IA"
+    },
+    "docs/12-proximos-passos-e-alinhamentos.md": {
+      "id": "27131905",
+      "title": "Fase 4 Lucas — 12 — Pendências, responsáveis e teste Mercado Pago",
+      "url": "https://marqs.atlassian.net/wiki/x/AQCeAQ"
     }
   },
   "github_destination": {
@@ -66,13 +71,13 @@
     "visibility": "public",
     "write_status": "branch created successfully through GitHub integration",
     "bootstrap_commit": "cf141eb2bc6e41f7782bee638c8f4d1fcb68bbab",
-    "canonical_development_source": "Git files on the documentation branch",
+    "canonical_development_source": "Git files on feat/billing-mvp-local; PR #2",
     "destination": "helyomendesdev/tech-challenge-oficina-billing",
     "documentation_commit": "5b4d88a5570917734fe927673e9424a42a9eddb1",
     "pull_request": "https://github.com/O-marqs/tech-challenge-oficina-billing-temp/pull/1",
     "development_branch": "feat/billing-mvp-local",
     "implementation_pr": "https://github.com/O-marqs/tech-challenge-oficina-billing-temp/pull/2",
-    "validated_functional_commit": "e7f668df37324c902a0140cc32cea73fb24d7bcf",
-    "ci": "https://github.com/O-marqs/tech-challenge-oficina-billing-temp/actions/runs/42110862161"
+    "validated_functional_commit": "ebd919fb1826c088c51407d113657ec15f271377",
+    "ci": "https://github.com/O-marqs/tech-challenge-oficina-billing-temp/actions/runs/42120591700"
   }
 }

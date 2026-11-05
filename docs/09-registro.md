@@ -62,3 +62,27 @@ com API/workers/PostgreSQL/LocalStack completou confirmação fake explícita, e
 cancelamento. Nenhuma evidência de integração real MP, stack OS/Execution ou deploy.
 PR #2 continua em rascunho, sem merge. Próxima tarefa depende de credenciais de TESTE MP
 e dos ajustes de integração já registrados no grupo.
+
+## 05/11/2026 — Revisão adicional e separação das pendências
+
+Reconfirmados os HEADs OS/Auth/Execution. Saga avançou para
+3a5c61f7cb1c9625834a17efe4fa748e15d359b0, corrigindo filas por destinatário (A-07).
+Execution ainda tem implementação em feat/execution-service, 34fa9a67859f63123e3a51eefa1699026279ec61;
+não confundir main inicial com ausência de desenvolvimento na branch.
+
+Corrigido adapter Orders: confirmação exige ID da transação; estorno confere BRL, referência,
+total e transação antes da chamada. Reembolso integral usa body vazio conforme a API e exige
+refunds processados com IDs únicos, transação e soma integral para emitir PagamentoEstornado.
+Resposta incompleta permanece pendente; não cancela orçamento como se tivesse compensado.
+MERCADO_PAGO_RETURN_URL agora é enviada em config.online; callback é configurado no painel.
+
+Acrescentadas 20 regressões. Local Python 3.12: 90 PASS, 3 SKIP PostgreSQL, cobertura 97,38%;
+Ruff/formato/Bandit, demo e diff check passaram. CI Python 3.11/PostgreSQL 16:
+93 PASS, sem SKIP, 97,25%; build Docker, auditoria sem vulnerabilidades conhecidas nos pacotes
+consultados, migrations/drift e stack Billing com PostgreSQL/SQS LocalStack passaram.
+Commit funcional remoto ebd919fb1826c088c51407d113657ec15f271377,
+[run 42120591700](https://github.com/O-marqs/tech-challenge-oficina-billing-temp/actions/runs/42120591700).
+
+Criado docs/12-proximos-passos-e-alinhamentos.md com matriz de responsáveis, perguntas objetivas,
+fontes atuais do provedor e roteiro de sandbox. Atualizados plano, causa HTTP e handoff para refletir
+o código existente. Sem alteração em repo do grupo, segredo, transação real, merge, deploy ou gasto contratado.

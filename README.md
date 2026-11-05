@@ -106,9 +106,9 @@ uv run alembic check
 uv build --wheel
 ```
 
-Resultado local atual: 70 testes passaram, 3 PostgreSQL ficaram SKIP; cobertura 96,66%, incluindo CLI.
-O [CI](https://github.com/O-marqs/tech-challenge-oficina-billing-temp/actions/runs/42110862161)
-comprovou 73 PASS sem SKIP, 96,92% incluindo CLI, PostgreSQL e o fluxo entre containers.
+Resultado local atual: 90 testes passaram, 3 PostgreSQL ficaram SKIP; cobertura 97,38%, incluindo CLI.
+O [CI](https://github.com/O-marqs/tech-challenge-oficina-billing-temp/actions/runs/42120591700)
+comprovou 93 PASS sem SKIP, 97,25% incluindo CLI, PostgreSQL e o fluxo entre containers.
 Resultados mais recentes, CI e limitações em [evidências](docs/11-implementacao.md).
 Para testar locking/transações reais, use um **banco de teste descartável** em
 `TEST_DATABASE_URL`; a fixture recria as tabelas desse banco. O CI fornece PostgreSQL 16.
@@ -134,6 +134,11 @@ K8s e CD autorizado. Pagamento tardio gera erro explícito para intervenção, n
 
 A implantação não é automática nesta branch; `k8s/workloads.yaml` é um template com imagem,
 namespace, ServiceAccount, ConfigMap e Secret externos, sem provisionar recursos pagos.
+
+Para revisar a entrega, ver [o que falta e quem resolve](docs/12-proximos-passos-e-alinhamentos.md).
+O documento inclui as perguntas ao grupo e o roteiro de sandbox Mercado Pago. Webhook é
+cadastrado no painel Teste; a URL de retorno é enviada em config.online da order. Reembolso
+integral exige evidência processada com a transação e o valor esperados, antes do evento da Saga.
 
 Leia [AGENTS.md](AGENTS.md), [continuidade](docs/08-continuidade.md),
 [decisões](docs/07-decisoes-pendencias.md), [contratos](docs/04-contratos-integracao.md),

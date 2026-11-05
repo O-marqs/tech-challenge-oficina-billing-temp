@@ -72,3 +72,22 @@ Não confundir auditoria automatizada de dependências com revisão de seguranç
   commit `e7f668df37324c902a0140cc32cea73fb24d7bcf`: **73 PASS, sem SKIP**, cobertura **96,92%**,
   incluindo CLI. Os jobs tests e container passaram, incluindo migrações, auditoria de dependências
   e o fluxo entre containers com PostgreSQL/LocalStack. Este é o último commit funcional validado.
+
+## Revisão adicional — estado atual
+
+- Commit funcional `ebd919fb1826c088c51407d113657ec15f271377`,
+  [run 42120591700](https://github.com/O-marqs/tech-challenge-oficina-billing-temp/actions/runs/42120591700):
+  **93 PASS, sem SKIP, cobertura 97,25%** incluindo CLI, em Python 3.11/PostgreSQL 16.
+  Tests e container passaram: Ruff/formato/Bandit, migrations/drift, demo, auditoria de dependências,
+  build Docker e fluxo API/workers/PostgreSQL/SQS LocalStack. Auditoria: nenhuma vulnerabilidade
+  conhecida encontrada nos pacotes consultados.
+- Vinte regressões adicionais validam ID do pagamento e evidência de reembolso. Resposta
+  parcial, pendente, sem evidência ou com moeda/transação/valor/ID divergente não libera compensação.
+  O teste transacional confirma que não sai PagamentoEstornado nem se permite cancelar orçamento
+  enquanto o provedor não comprova reembolso integral. A chave idempotente é preservada.
+- Corrigido envio da URL de retorno em config.online (success_url/failure_url/pending_url).
+  Webhook continua sendo configurado no painel Teste, conforme documentação oficial.
+- Localmente: Python 3.12.14, 90 PASS, 3 SKIP PostgreSQL, 97,38%. Ambiente foi recriado após
+  indisponibilidade do interpretador local anterior; não se atribui essa execução a Python 3.11.
+- Limites anteriores permanecem. Roteiro e atribuições em
+  [12-proximos-passos-e-alinhamentos.md](12-proximos-passos-e-alinhamentos.md).
