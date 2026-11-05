@@ -33,7 +33,6 @@ markers = ["postgres: requires TEST_DATABASE_URL pointing to a dedicated Postgre
 
 [tool.coverage.run]
 source = ["billing_service"]
-omit = ["billing_service/cli.py"]
 
 [tool.coverage.report]
 show_missing = true
