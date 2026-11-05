@@ -1,0 +1,72 @@
+{
+  "data": "2026-11-05",
+  "hub": "https://marqs.atlassian.net/wiki/spaces/~7120204dc1d32324e343dcad205794dd624c7c/pages/26247169/Tech+Challenge+Fase+4+Lucas+Billing+Mercado+Pago+e+JWT",
+  "pages": {
+    "docs/01-auditoria.md": {
+      "id": "26279937",
+      "title": "Fase 4 Lucas — 01 — Auditoria inicial dos repositórios",
+      "url": "https://marqs.atlassian.net/wiki/spaces/~7120204dc1d32324e343dcad205794dd624c7c/pages/26279937/Fase+4+Lucas+01+Auditoria+inicial+dos+reposit+rios"
+    },
+    "docs/02-escopo-requisitos.md": {
+      "id": "26312705",
+      "title": "Fase 4 Lucas — 02 — Escopo e rastreabilidade",
+      "url": "https://marqs.atlassian.net/wiki/spaces/~7120204dc1d32324e343dcad205794dd624c7c/pages/26312705/Fase+4+Lucas+02+Escopo+e+rastreabilidade"
+    },
+    "docs/03-arquitetura.md": {
+      "id": "26345473",
+      "title": "Fase 4 Lucas — 03 — Arquitetura proposta para o Billing",
+      "url": "https://marqs.atlassian.net/wiki/spaces/~7120204dc1d32324e343dcad205794dd624c7c/pages/26345473/Fase+4+Lucas+03+Arquitetura+proposta+para+o+Billing"
+    },
+    "docs/04-contratos-integracao.md": {
+      "id": "26378241",
+      "title": "Fase 4 Lucas — 04 — Contratos e integração",
+      "url": "https://marqs.atlassian.net/wiki/spaces/~7120204dc1d32324e343dcad205794dd624c7c/pages/26378241/Fase+4+Lucas+04+Contratos+e+integra+o"
+    },
+    "docs/05-plano-entregas.md": {
+      "id": "26411009",
+      "title": "Fase 4 Lucas — 05 — Plano de entregas do Lucas",
+      "url": "https://marqs.atlassian.net/wiki/spaces/~7120204dc1d32324e343dcad205794dd624c7c/pages/26411009/Fase+4+Lucas+05+Plano+de+entregas+do+Lucas"
+    },
+    "docs/06-operacao-custos.md": {
+      "id": "26443777",
+      "title": "Fase 4 Lucas — 06 — Desenvolvimento local e custos",
+      "url": "https://marqs.atlassian.net/wiki/spaces/~7120204dc1d32324e343dcad205794dd624c7c/pages/26443777/Fase+4+Lucas+06+Desenvolvimento+local+e+custos"
+    },
+    "docs/07-decisoes-pendencias.md": {
+      "id": "26247190",
+      "title": "Fase 4 Lucas — 07 — Decisões e pendências",
+      "url": "https://marqs.atlassian.net/wiki/spaces/~7120204dc1d32324e343dcad205794dd624c7c/pages/26247190/Fase+4+Lucas+07+Decis+es+e+pend+ncias"
+    },
+    "docs/08-continuidade.md": {
+      "id": "26476545",
+      "title": "Fase 4 Lucas — 08 — Continuidade para Lucas, ChatGPT e Codex",
+      "url": "https://marqs.atlassian.net/wiki/spaces/~7120204dc1d32324e343dcad205794dd624c7c/pages/26476545/Fase+4+Lucas+08+Continuidade+para+Lucas+ChatGPT+e+Codex"
+    },
+    "docs/09-registro.md": {
+      "id": "26509313",
+      "title": "Fase 4 Lucas — 09 — Registro de trabalho",
+      "url": "https://marqs.atlassian.net/wiki/spaces/~7120204dc1d32324e343dcad205794dd624c7c/pages/26509313/Fase+4+Lucas+09+Registro+de+trabalho"
+    },
+    "AGENTS.md": {
+      "id": "26542081",
+      "title": "Fase 4 Lucas — AGENTS e instruções para IA",
+      "url": "https://marqs.atlassian.net/wiki/spaces/~7120204dc1d32324e343dcad205794dd624c7c/pages/26542081/Fase+4+Lucas+AGENTS+e+instru+es+para+IA"
+    }
+  },
+  "github_destination": {
+    "repository": "helyomendesdev/tech-challenge-oficina-billing",
+    "branch_planned": "docs/fase4-lucas-planejamento",
+    "write_status": "HTTP 403 Resource not accessible by integration",
+    "commit_created": false,
+    "branch_created": false
+  },
+  "github": {
+    "repository": "O-marqs/tech-challenge-oficina-billing-temp",
+    "branch": "docs/fase4-lucas-planejamento",
+    "visibility": "public",
+    "write_status": "branch created successfully through GitHub integration",
+    "bootstrap_commit": "cf141eb2bc6e41f7782bee638c8f4d1fcb68bbab",
+    "canonical_development_source": "Git files on the documentation branch",
+    "destination": "helyomendesdev/tech-challenge-oficina-billing"
+  }
+}
