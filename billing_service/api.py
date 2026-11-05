@@ -47,7 +47,9 @@ def create_app(settings: Settings | None = None, *, database=None, provider=None
     gateway = provider or (
         FakeProvider()
         if cfg.payment_provider == "fake"
-        else MercadoPagoOrders(cfg.mercado_pago_access_token.get_secret_value())
+        else MercadoPagoOrders(
+            cfg.mercado_pago_access_token.get_secret_value(), return_url=cfg.mercado_pago_return_url
+        )
     )
     app = FastAPI(
         title="Oficina Billing",

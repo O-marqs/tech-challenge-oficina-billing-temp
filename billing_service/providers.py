@@ -31,11 +31,14 @@ def cents(value) -> int:
 
 
 class MercadoPagoOrders:
-    def __init__(self, access_token: str, *, client: httpx.Client | None = None):
+    def __init__(
+        self, access_token: str, *, return_url: str = "", client: httpx.Client | None = None
+    ):
         self.client = client or httpx.Client(
             base_url="https://api.mercadopago.com", timeout=10, follow_redirects=False
         )
         self.headers = {"Authorization": f"Bearer {access_token}"}
+        self.return_url = return_url
 
     def _request(self, method: str, path: str, *, key: str | None = None, body=None) -> dict:
         headers = {**self.headers, **({"X-Idempotency-Key": key} if key else {})}
@@ -62,6 +65,19 @@ class MercadoPagoOrders:
                 "total_amount": amount,
                 "external_reference": payment.id,
                 "items": [{"title": "Orçamento oficina", "quantity": 1, "unit_price": amount}],
+                **(
+                    {
+                        "config": {
+                            "online": {
+                                "success_url": self.return_url,
+                                "failure_url": self.return_url,
+                                "pending_url": self.return_url,
+                            }
+                        }
+                    }
+                    if self.return_url
+                    else {}
+                ),
             },
         )
         self._test_order(data)
@@ -94,6 +110,10 @@ class MercadoPagoOrders:
             and p.get("status") == "processed"
             and p.get("status_detail") == "accredited"
         ):
+            if not isinstance(p.get("id"), str) or not p["id"] or p["id"] == resource_id:
+                raise BillingError(
+                    "PAGAMENTO_PROVEDOR_INVALIDO", "Pagamento aprovado sem ID de transação válido."
+                )
             status = "approved"
             amount = cents(p["paid_amount"])
         else:
@@ -111,24 +131,44 @@ class MercadoPagoOrders:
 
     def refund(self, payment: Payment, key: str) -> bool:
         data = self._get(payment.order_id or "")
+        payments = data.get("transactions", {}).get("payments", [])
         if (
             data["external_reference"] != payment.id
             or cents(data["total_amount"]) != payment.amount
+            or data.get("currency") != "BRL"
+            or not payment.provider_payment_id
+            or len(payments) != 1
+            or payments[0].get("id") != payment.provider_payment_id
         ):
             raise BillingError("ORDER_DIVERGENTE", "Order não corresponde ao pagamento.")
         if data.get("status") == "refunded":
-            return True
+            return self._refund_complete(data, payment)
+        if cents(payments[0]["paid_amount"]) != payment.amount:
+            raise BillingError("ORDER_DIVERGENTE", "Valor pago não corresponde ao pagamento.")
         result = self._request(
             "POST",
             f"/v1/orders/{payment.order_id}/refund",
             key=key,
-            body={
-                "transactions": [
-                    {
-                        "id": payment.provider_payment_id,
-                        "amount": f"{Decimal(payment.amount) / 100:.2f}",
-                    }
-                ]
-            },
+            body={},  # Orders API: empty body requests the full refund required by the Saga.
         )
-        return result.get("status") == "refunded"
+        return self._refund_complete(result, payment)
+
+    def _refund_complete(self, data: dict, payment: Payment) -> bool:
+        self._test_order(data)
+        if data["id"] != payment.order_id:
+            raise BillingError("ORDER_DIVERGENTE", "Estorno não corresponde à order.")
+        if data.get("status") != "refunded" or data.get("status_detail") != "refunded":
+            return False
+        refunds = data.get("transactions", {}).get("refunds", [])
+        if not refunds:
+            return False
+        ids = [r.get("id") for r in refunds]
+        if (
+            any(not isinstance(rid, str) or not rid for rid in ids)
+            or len(set(ids)) != len(ids)
+            or any(r.get("transaction_id") != payment.provider_payment_id for r in refunds)
+        ):
+            raise BillingError("ESTORNO_DIVERGENTE", "Estorno não corresponde à transação.")
+        if any(r.get("status") != "processed" for r in refunds):
+            return False
+        return sum(cents(r["amount"]) for r in refunds) == payment.amount

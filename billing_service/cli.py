@@ -65,7 +65,9 @@ def main():
     provider = (
         FakeProvider()
         if cfg.payment_provider == "fake"
-        else MercadoPagoOrders(cfg.mercado_pago_access_token.get_secret_value())
+        else MercadoPagoOrders(
+            cfg.mercado_pago_access_token.get_secret_value(), return_url=cfg.mercado_pago_return_url
+        )
     )
     if args.action == "migrate":
         command.upgrade(Config("alembic.ini"), "head")
