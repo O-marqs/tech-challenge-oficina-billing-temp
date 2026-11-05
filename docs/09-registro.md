@@ -52,3 +52,13 @@ JWT cliente, catálogo, PostgreSQL/SQLite, Alembic, inbox/outbox, SQS FIFO, oper
 provider fake e adapter de testes Mercado Pago Orders. Primeiro resultado local: 62 PASS,
 3 SKIP PostgreSQL e cobertura 96,98%. Demonstração isolada e migrations executadas.
 Conferir docs/11-implementacao.md para limitações e resultados posteriores de CI.
+
+### Validação final da implementação funcional
+
+Código validado no commit remoto e7f668df37324c902a0140cc32cea73fb24d7bcf.
+Run 42110862161: 73 PASS, 96,92% incluindo CLI, nenhum SKIP; Ruff/formato/Bandit,
+Alembic upgrade/check, auditoria de dependências e Docker passaram. Smoke de containers
+com API/workers/PostgreSQL/LocalStack completou confirmação fake explícita, estorno e
+cancelamento. Nenhuma evidência de integração real MP, stack OS/Execution ou deploy.
+PR #2 continua em rascunho, sem merge. Próxima tarefa depende de credenciais de TESTE MP
+e dos ajustes de integração já registrados no grupo.

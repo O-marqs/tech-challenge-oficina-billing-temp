@@ -50,3 +50,25 @@ sem substituí-los por SQLite.
 Integração MP em ambiente de testes, BDD completo do grupo, envio/visualização de trace no New Relic,
 identidade atendente, IAM/infra, branch protection, K8s/CD e migração ao repo do Hélio permanecem pendentes.
 O compose Billing é de desenvolvimento e a demonstração exercita somente o participante Billing.
+
+## CI já observado
+
+- [Run 42109938228](https://github.com/O-marqs/tech-challenge-oficina-billing-temp/actions/runs/42109938228),
+  commit `0a5b746c2d4e40081ab39d7eb9411122fbe72f68`: 65 PASS em PostgreSQL 16, sem SKIP,
+  cobertura 96,98% (CLI ainda fora do denominador nesse commit). Ruff/Bandit, Alembic upgrade/check,
+  demo, auditoria de dependências e build Docker passaram. Auditoria retornou “No known vulnerabilities found”.
+- [Run 42110438914](https://github.com/O-marqs/tech-challenge-oficina-billing-temp/actions/runs/42110438914),
+  commit `4a10bca5309344cad44d662525d43cc7563453f9`: além das verificações anteriores,
+  `docker compose up` e smoke real entre API + workers + PostgreSQL + SQS LocalStack passaram.
+  Observados OrcamentoGerado, OrcamentoAprovado, PagamentoConfirmado, PagamentoEstornado e OrcamentoCancelado,
+  todos com a correlação esperada. Provider fake explícito; OS/Execution não participaram.
+- Depois foram acrescentados oito testes da CLI, agora incluída na cobertura. Resultado local:
+  70 PASS, 3 SKIP PostgreSQL, 96,66% sobre todo `billing_service`. Verificar run atual para resultado remoto.
+
+Docker e PostgreSQL não foram executados no ambiente de edição; foram executados pelos runners do CI.
+Não confundir auditoria automatizada de dependências com revisão de segurança completa.
+
+- [Run 42110862161](https://github.com/O-marqs/tech-challenge-oficina-billing-temp/actions/runs/42110862161),
+  commit `e7f668df37324c902a0140cc32cea73fb24d7bcf`: **73 PASS, sem SKIP**, cobertura **96,92%**,
+  incluindo CLI. Os jobs tests e container passaram, incluindo migrações, auditoria de dependências
+  e o fluxo entre containers com PostgreSQL/LocalStack. Este é o último commit funcional validado.

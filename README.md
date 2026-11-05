@@ -86,6 +86,10 @@ uv run billing operations
 uv run billing relay
 ```
 
+Para validar a comunicação entre os containers após subir a stack, execute
+`uv run python scripts/smoke_stack.py`. Isso usa confirmação fake explícita via CLI;
+não é teste do Mercado Pago nem da stack completa do grupo.
+
 As URLs SQS vêm de `QUEUE_BILLING_COMANDOS_URL` e `QUEUE_OS_SAGA_RESPOSTAS_URL`.
 Ack só ocorre após commit de estado/inbox/intenção/outbox. Falha na publicação mantém a
 outbox; reenvio usa o mesmo messageId. A janela de dedupe SQS não substitui a inbox.
@@ -102,7 +106,9 @@ uv run alembic check
 uv build --wheel
 ```
 
-Resultado local inicial: 62 testes passaram, 3 PostgreSQL ficaram SKIP; cobertura 96,98%.
+Resultado local atual: 70 testes passaram, 3 PostgreSQL ficaram SKIP; cobertura 96,66%, incluindo CLI.
+O [CI](https://github.com/O-marqs/tech-challenge-oficina-billing-temp/actions/runs/42110862161)
+comprovou 73 PASS sem SKIP, 96,92% incluindo CLI, PostgreSQL e o fluxo entre containers.
 Resultados mais recentes, CI e limitações em [evidências](docs/11-implementacao.md).
 Para testar locking/transações reais, use um **banco de teste descartável** em
 `TEST_DATABASE_URL`; a fixture recria as tabelas desse banco. O CI fornece PostgreSQL 16.

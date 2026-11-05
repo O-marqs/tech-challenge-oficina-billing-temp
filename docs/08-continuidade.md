@@ -1,69 +1,58 @@
-# Estado atual de desenvolvimento
+# Continuidade — estado atual do Billing
 
-Branch atual: `feat/billing-mvp-local`, baseada em `docs/fase4-lucas-planejamento`.
-Há código Billing executável, CLI, API e testes. Leia primeiro README e docs/11-implementacao.md.
-O levantamento abaixo é histórico: os status NÃO INICIADO foram superados pela implementação inicial.
-Integração MP real, stack do grupo, New Relic e deploy ainda não foram comprovados.
+Data: 05/11/2026. Repo de trabalho: `O-marqs/tech-challenge-oficina-billing-temp`.
+Branch executável: `feat/billing-mvp-local`; [PR #2 em rascunho](https://github.com/O-marqs/tech-challenge-oficina-billing-temp/pull/2).
+Base documental: `docs/fase4-lucas-planejamento`, PR #1. Nenhum merge ou deploy foi feito.
+Destino oficial: `helyomendesdev/tech-challenge-oficina-billing`, inalterado por esta sessão.
 
-# Continuidade para Lucas, ChatGPT e Codex
+## Leia e execute primeiro
 
-## Resumo que outra IA precisa ler
+1. Leia README, AGENTS.md e docs/11-implementacao.md; confira HEAD/CI do PR #2.
+2. `uv sync --frozen --extra dev` e `uv run python scripts/demo.py`.
+3. `uv run pytest --cov=billing_service --cov-report=term-missing`.
+4. Para processos separados, usar compose.yml e scripts/smoke_stack.py, conforme README.
+5. Não use o antigo ZIP documental como estado atual: ele precede o código.
 
-Lucas assumiu Billing/Mercado Pago/JWT da Fase 4. Em 05/11/2026 confirmou que não começou
-implementação. Autorizou começar a colaboração por aqui e registrar tudo no GitHub, priorizando
-custos mínimos. Codex local estava desligado. O primeiro resultado é esta documentação;
-nenhuma funcionalidade Billing foi construída ou testada.
+## Implementado
 
-Referência atual de desenvolvimento: [repo temporário do Lucas](https://github.com/O-marqs/tech-challenge-oficina-billing-temp),
-branch `docs/fase4-lucas-planejamento`. A criação/publicação foi expressamente autorizada
-pelo Lucas, após o bloqueio de escrita no Billing do Hélio.
-O [hub Confluence](https://marqs.atlassian.net/wiki/spaces/~7120204dc1d32324e343dcad205794dd624c7c/pages/26247169/Tech+Challenge+Fase+4+Lucas+Billing+Mercado+Pago+e+JWT)
-permanece como índice. O pacote inicial é um snapshot histórico anterior ao temporário.
-Destino final: `helyomendesdev/tech-challenge-oficina-billing`, que não recebeu alterações.
-Não transferir propriedade do temporário por cima do destino existente: usar transporte
-de commits/branch revisado conforme `docs/10-migracao-github.md`.
+API FastAPI com JWT RS256 e ownership de cliente; catálogo local configurável; geração,
+aprovação, recusa e cancelamento de orçamento; SQLite para demo/PostgreSQL para execução;
+Alembic; inbox/outbox; consumer/publisher FIFO; operações de provedor duráveis, retry,
+reconciliação por CLI; provider fake explícito; adapter Checkout Pro Orders e webhook
+assinados testados por HTTP mocks; Docker/compose, CI e templates K8s.
 
-## Estado de trabalho
+Primeiro CI: 65 PASS, cobertura 96,98% com PostgreSQL; build Docker e auditoria sem vulnerabilidades
+conhecidas nos pacotes consultados. CI seguinte também validou API/workers + PostgreSQL + LocalStack,
+incluindo confirmação fake explícita, estorno e cancelamento. Fonte: docs/11-implementacao.md.
+Depois, a CLI passou a integrar o denominador de cobertura e recebeu oito testes: resultado local
+70 PASS, 3 SKIP PostgreSQL, cobertura 96,66%. No run 42110862161, o mesmo commit funcional
+e7f668df37324c902a0140cc32cea73fb24d7bcf passou com 73 PASS, sem SKIP, cobertura 96,92% e
+integração de containers. Próximos commits apenas documentais não substituem essa ancoragem.
 
-| Item | Estado |
-|---|---|
-| Enunciado e divisão técnica do grupo | Lidos; resumidos sem republicar anexos/histórico |
-| Inventário de oito repos e branches relevantes | Feito; referências imutáveis em 01-auditoria |
-| Leitura de código/contratos/workflows | Feita por amostragem dirigida aos riscos de integração |
-| Plano/AGENTS/arquitetura/contratos/custos | Branch documental no temporário; índice no Confluence |
-| Billing executável, DB, API e workers | NÃO INICIADO |
-| Integração MP e JWT Fase 4 | NÃO INICIADA |
-| Testes/cobertura local de Billing | NÃO EXECUTADOS / INEXISTENTES |
-| CI, deploy e BDD real de Billing | NÃO EXECUTADOS |
+## Próximos passos úteis
 
-## Retomar com segurança e utilidade
+- Configurar conta/aplicação/credenciais de TESTE Mercado Pago e callback HTTPS; provar cobrança,
+  recusa e estorno reais no ambiente de testes. Nunca solicitar tokens pelo chat.
+- Alinhar com Hélio/Luís os payloads incompletos do orquestrador, os dados/tokens do BDD e o mapeamento
+  de variáveis. `compose.team.override.yml` é proposta local, não comprova stack completa.
+- Sophia precisa conectar ciclo de conclusão/cancelamento Execution; Billing não deve simular esse serviço.
+- Definir identidade atendente e origem do cadastro ativo sem leitura direta de banco alheio.
+- Validar exportação de spans New Relic; hoje há W3C no transporte e correlação persistida.
+- Preparar CD/K8s somente depois de destino/configuração/review autorizados.
+- Antes de migrar, ler docs/10-migracao-github.md e conferir código novo no repo do Hélio.
 
-1. Ler `AGENTS.md`, `07-decisoes-pendencias.md` e `05-plano-entregas.md`.
-2. Inspecionar Git e HEADs remotos; equipe atualiza os repos durante o trabalho.
-3. Não atribuir a main do Execution o código que só existe em `feat/execution-service`.
-4. P-01 (preços) deve ser respondida antes da precificação; P-06 antes de teste MP real.
-5. Próxima entrega técnica independente: PR-02, esqueleto local. Manter interfaces pendentes
-   explícitas; não precisar de AWS, credenciais MP ou PC Codex para escrever e testar núcleo.
-6. Antes de mexer em Auth/OS/Saga, ler instruções daquele repo e abrir mudança separada somente
-   no escopo autorizado; não alterar contrato compartilhado para acomodar bug local.
-7. Registrar cada resultado com comandos e evidências; atualizar este handoff no mesmo commit.
+## Regras que precisam continuar explícitas
 
-## Instrução pronta para continuação
+Preço demo é sintético, não preço corporativo. Causa HTTP de decisão é o evento OrcamentoGerado;
+requestId e trace da Saga são preservados. Total zero é rejeitado com OrcamentoFalhou.
+Fake não autoaprova pagamento e não possui endpoint HTTP de sucesso; simulação é CLI de desenvolvimento.
+Notificação tardia/duplicada financeiramente exige intervenção; não descartar cobrança real.
+Credenciais, transações reais, Terraform apply, merge, deploy e mensagens ao grupo não foram autorizados.
 
-> Continue o Billing da Fase 4 no repo O-marqs/tech-challenge-oficina-billing-temp.
-> Leia a branch docs/fase4-lucas-planejamento, especialmente AGENTS.md,
-> docs/08-continuidade.md e docs/10-migracao-github.md. O destino final é
-> helyomendesdev/tech-challenge-oficina-billing, ainda sem escrita autorizada pela integração.
-> Confira HEADs e docs/07-decisoes-pendencias.md; não assuma que o plano virou código.
-> Implemente a próxima entrega independente de docs/05-plano-entregas.md, com custo mínimo,
-> testes reproduzíveis e registro no handoff. Mantenha contratos Saga/JWT existentes e bancos
-> separados. Pare e pergunte ao Lucas se surgir dúvida de regra de negócio/contrato não resolvida.
-> Não faça merge, deploy, terraform apply ou pagamento real. Ao terminar, reporte branch/SHA,
-> arquivos, testes efetivamente rodados e o que ainda depende do grupo.
+## Instrução para outra IA
 
-## Onde estão as evidências
-
-`01-auditoria.md`: SHAs, branches, achados e links de Actions.
-`04-contratos-integracao.md`: mensagens, HTTP, JWT e lacunas.
-`09-registro.md`: trabalho realizado, validações e publicação.
-Anexos pessoais do grupo não fazem parte do repo; não são necessários para retomar o plano.
+> Continue na branch feat/billing-mvp-local do repo temporário O-marqs/tech-challenge-oficina-billing-temp.
+> Leia AGENTS.md, README e docs/11-implementacao.md. Confira o PR #2 e seus checks antes de mudar.
+> O serviço já executa localmente; não recomece do zero e não trate o plano inicial como implementação pendente.
+> Avance nas dependências reais do grupo e no teste Mercado Pago após configuração segura do ambiente.
+> Preserve schemas/JWT/bancos separados, não faça merge ou deploy e atualize este handoff com evidências.

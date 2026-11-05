@@ -69,6 +69,10 @@
     "canonical_development_source": "Git files on the documentation branch",
     "destination": "helyomendesdev/tech-challenge-oficina-billing",
     "documentation_commit": "5b4d88a5570917734fe927673e9424a42a9eddb1",
-    "pull_request": "https://github.com/O-marqs/tech-challenge-oficina-billing-temp/pull/1"
+    "pull_request": "https://github.com/O-marqs/tech-challenge-oficina-billing-temp/pull/1",
+    "development_branch": "feat/billing-mvp-local",
+    "implementation_pr": "https://github.com/O-marqs/tech-challenge-oficina-billing-temp/pull/2",
+    "validated_functional_commit": "e7f668df37324c902a0140cc32cea73fb24d7bcf",
+    "ci": "https://github.com/O-marqs/tech-challenge-oficina-billing-temp/actions/runs/42110862161"
   }
 }
