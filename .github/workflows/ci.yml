@@ -70,3 +70,18 @@ jobs:
         run: |
           docker run --rm oficina-billing:${{ github.sha }} python -m billing_service.cli migrate
           docker run --rm oficina-billing:${{ github.sha }} python -c "from billing_service.contract import VALIDATORS; assert 'GerarOrcamento' in VALIDATORS"
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - uses: astral-sh/setup-uv@v6
+      - run: uv sync --frozen --extra dev
+      - name: Billing containers, PostgreSQL and SQS integration
+        run: |
+          uv run python scripts/dev_keys.py
+          export AUTH_JWT_PUBLIC_KEY_B64="$(cat .local/jwt-public.b64)"
+          docker compose config --quiet
+          docker compose up -d --build --wait --wait-timeout 180
+          uv run python scripts/smoke_stack.py
+      - name: Stop local stack
+        if: always()
+        run: docker compose down
