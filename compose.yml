@@ -1,0 +1,77 @@
+name: oficina-billing-local
+x-billing-env: &billing-env
+  APP_ENV: development
+  PAYMENT_PROVIDER: fake
+  DATABASE_URL: postgresql+psycopg://billing:billing_local_only@postgres:5432/billing
+  AUTH_JWT_PUBLIC_KEY_B64: ${AUTH_JWT_PUBLIC_KEY_B64:-}
+  AWS_REGION: us-east-1
+  AWS_ACCESS_KEY_ID: test
+  AWS_SECRET_ACCESS_KEY: test
+  AWS_ENDPOINT_URL: http://localstack:4566
+  QUEUE_BILLING_COMANDOS_URL: http://localstack:4566/000000000000/oficina-billing-comandos.fifo
+  QUEUE_OS_SAGA_RESPOSTAS_URL: http://localstack:4566/000000000000/oficina-os-saga-respostas.fifo
+x-process: &process
+  build: .
+  image: oficina-billing:local
+  environment: *billing-env
+  depends_on:
+    migrate:
+      condition: service_completed_successfully
+    queues:
+      condition: service_completed_successfully
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: billing
+      POSTGRES_USER: billing
+      POSTGRES_PASSWORD: billing_local_only
+    volumes: ["billing-data:/var/lib/postgresql/data"]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U billing -d billing"]
+      interval: 5s
+      retries: 15
+  localstack:
+    image: localstack/localstack:3.8.1
+    environment:
+      SERVICES: sqs
+      AWS_DEFAULT_REGION: us-east-1
+    ports: ["4566:4566"]
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:4566/_localstack/health"]
+      interval: 5s
+      retries: 20
+  migrate:
+    build: .
+    image: oficina-billing:local
+    environment: *billing-env
+    command: ["python", "-m", "billing_service.cli", "migrate"]
+    depends_on:
+      postgres:
+        condition: service_healthy
+  queues:
+    build: .
+    environment: *billing-env
+    volumes: ["./scripts:/scripts:ro"]
+    command: ["python", "/scripts/create_queues.py"]
+    depends_on:
+      localstack:
+        condition: service_healthy
+  api:
+    <<: *process
+    ports: ["8001:8000"]
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health/ready/')"]
+      interval: 5s
+      retries: 15
+  consumer:
+    <<: *process
+    command: ["python", "-m", "billing_service.cli", "consume"]
+  operations:
+    <<: *process
+    command: ["python", "-m", "billing_service.cli", "operations"]
+  relay:
+    <<: *process
+    command: ["python", "-m", "billing_service.cli", "relay"]
+volumes:
+  billing-data:

@@ -1,0 +1,72 @@
+name: Billing CI
+on:
+  push:
+    branches: ["feat/**"]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: billing-ci-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_DB: billing_test
+          POSTGRES_USER: billing
+          POSTGRES_PASSWORD: billing_test_only
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd "pg_isready -U billing -d billing_test"
+          --health-interval 5s --health-timeout 5s --health-retries 10
+    env:
+      TEST_DATABASE_URL: postgresql+psycopg://billing:billing_test_only@localhost:5432/billing_test
+      AWS_ACCESS_KEY_ID: testing
+      AWS_SECRET_ACCESS_KEY: testing
+      AWS_DEFAULT_REGION: us-east-1
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - uses: astral-sh/setup-uv@v6
+        with:
+          enable-cache: true
+      - run: uv sync --frozen --extra dev
+      - run: uv run ruff check .
+      - run: uv run ruff format --check .
+      - run: uv run bandit -q -r billing_service
+      - run: uv run pytest --cov=billing_service --cov-report=xml --cov-report=term-missing
+      - name: Migrations and drift check
+        env:
+          DATABASE_URL: postgresql+psycopg://billing:billing_test_only@localhost:5432/billing_test
+        run: |
+          uv run python -c "from billing_service.database import Base,Database; import os; Base.metadata.drop_all(Database(os.environ['DATABASE_URL']).engine)"
+          uv run alembic upgrade head
+          uv run alembic check
+      - name: Local participant demonstration
+        run: uv run python scripts/demo.py
+      - name: Dependency audit
+        run: uv run pip-audit -r requirements.txt --disable-pip
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: billing-coverage
+          path: coverage.xml
+          retention-days: 3
+  container:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - run: docker build -t oficina-billing:${{ github.sha }} .
+      - name: Container migrations and readiness
+        run: |
+          docker run --rm oficina-billing:${{ github.sha }} python -m billing_service.cli migrate
+          docker run --rm oficina-billing:${{ github.sha }} python -c "from billing_service.contract import VALIDATORS; assert 'GerarOrcamento' in VALIDATORS"

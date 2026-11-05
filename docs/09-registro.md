@@ -44,3 +44,11 @@ Publicação documental confirmada: commit `5b4d88a5570917734fe927673e9424a42a9e
 [PR #1 em rascunho](https://github.com/O-marqs/tech-challenge-oficina-billing-temp/pull/1),
 sem merge. Árvore remota e leitura de AGENTS.md conferidas após publicação.
 Verificação local: links internos e whitespace válidos; nenhuma alegação de teste funcional.
+
+## 05/11/2026 — Implementação acelerada autorizada
+
+Criada branch feat/billing-mvp-local a partir da documentação publicada. Implementados API,
+JWT cliente, catálogo, PostgreSQL/SQLite, Alembic, inbox/outbox, SQS FIFO, operações duráveis,
+provider fake e adapter de testes Mercado Pago Orders. Primeiro resultado local: 62 PASS,
+3 SKIP PostgreSQL e cobertura 96,98%. Demonstração isolada e migrations executadas.
+Conferir docs/11-implementacao.md para limitações e resultados posteriores de CI.

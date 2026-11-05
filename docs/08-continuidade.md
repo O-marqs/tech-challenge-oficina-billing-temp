@@ -1,3 +1,10 @@
+# Estado atual de desenvolvimento
+
+Branch atual: `feat/billing-mvp-local`, baseada em `docs/fase4-lucas-planejamento`.
+Há código Billing executável, CLI, API e testes. Leia primeiro README e docs/11-implementacao.md.
+O levantamento abaixo é histórico: os status NÃO INICIADO foram superados pela implementação inicial.
+Integração MP real, stack do grupo, New Relic e deploy ainda não foram comprovados.
+
 # Continuidade para Lucas, ChatGPT e Codex
 
 ## Resumo que outra IA precisa ler

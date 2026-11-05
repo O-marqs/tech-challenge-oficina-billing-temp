@@ -1,0 +1,103 @@
+# Render BILLING_IMAGE and existing namespace/ServiceAccount before applying.
+# No cluster, IAM, database or queues are provisioned here.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: billing-api
+  namespace: oficina-billing
+spec:
+  replicas: 1
+  selector:
+    matchLabels: {app: billing-api}
+  template:
+    metadata:
+      labels: {app: billing-api}
+    spec:
+      serviceAccountName: billing-runtime
+      securityContext: {runAsNonRoot: true, runAsUser: 10001}
+      containers:
+        - name: api
+          image: BILLING_IMAGE
+          ports: [{containerPort: 8000}]
+          envFrom:
+            - configMapRef: {name: billing-config}
+            - secretRef: {name: billing-secrets}
+          readinessProbe:
+            httpGet: {path: /health/ready/, port: 8000}
+          livenessProbe:
+            httpGet: {path: /health/live/, port: 8000}
+          resources:
+            requests: {cpu: 100m, memory: 128Mi}
+            limits: {cpu: 500m, memory: 256Mi}
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities: {drop: [ALL]}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: billing
+  namespace: oficina-billing
+spec:
+  selector: {app: billing-api}
+  ports: [{port: 8000, targetPort: 8000}]
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: billing-workers
+  namespace: oficina-billing
+spec:
+  replicas: 1
+  selector:
+    matchLabels: {app: billing-workers}
+  template:
+    metadata:
+      labels: {app: billing-workers}
+    spec:
+      serviceAccountName: billing-runtime
+      securityContext: {runAsNonRoot: true, runAsUser: 10001}
+      containers:
+        - name: consumer
+          image: BILLING_IMAGE
+          command: [python, -m, billing_service.cli, consume]
+          envFrom: [{configMapRef: {name: billing-config}}, {secretRef: {name: billing-secrets}}]
+          resources:
+            requests: {cpu: 100m, memory: 128Mi}
+            limits: {cpu: 500m, memory: 256Mi}
+          securityContext: {allowPrivilegeEscalation: false, capabilities: {drop: [ALL]}}
+        - name: operations
+          image: BILLING_IMAGE
+          command: [python, -m, billing_service.cli, operations]
+          envFrom: [{configMapRef: {name: billing-config}}, {secretRef: {name: billing-secrets}}]
+          resources:
+            requests: {cpu: 100m, memory: 128Mi}
+            limits: {cpu: 500m, memory: 256Mi}
+          securityContext: {allowPrivilegeEscalation: false, capabilities: {drop: [ALL]}}
+        - name: relay
+          image: BILLING_IMAGE
+          command: [python, -m, billing_service.cli, relay]
+          envFrom: [{configMapRef: {name: billing-config}}, {secretRef: {name: billing-secrets}}]
+          resources:
+            requests: {cpu: 100m, memory: 128Mi}
+            limits: {cpu: 500m, memory: 256Mi}
+          securityContext: {allowPrivilegeEscalation: false, capabilities: {drop: [ALL]}}
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: billing-migrate
+  namespace: oficina-billing
+spec:
+  backoffLimit: 2
+  template:
+    spec:
+      restartPolicy: Never
+      serviceAccountName: billing-runtime
+      securityContext: {runAsNonRoot: true, runAsUser: 10001}
+      containers:
+        - name: migrate
+          image: BILLING_IMAGE
+          command: [python, -m, billing_service.cli, migrate]
+          envFrom: [{configMapRef: {name: billing-config}}, {secretRef: {name: billing-secrets}}]
+          securityContext: {allowPrivilegeEscalation: false, capabilities: {drop: [ALL]}}

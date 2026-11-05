@@ -1,0 +1,9 @@
+.git
+.venv
+.env
+.local
+*.pem
+*.key
+__pycache__
+.pytest_cache
+htmlcov

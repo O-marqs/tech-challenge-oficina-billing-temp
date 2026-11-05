@@ -1,3 +1,10 @@
+# Atualização de implementação
+
+Lucas autorizou avançar autonomamente em 05/11. P-01/P-02/P-04/P-07 têm escolhas locais reversíveis
+para o MVP, registradas em docs/11-implementacao.md: catálogo demo configurável, GET do link,
+causa em OrcamentoGerado e rejeição de total zero. Precisam de alinhamento do grupo antes do aceite
+integrado. Credenciais MP e perfil atendente continuam pendentes. Registro inicial segue abaixo.
+
 # Decisões e pendências
 
 Cada decisão distingue fato do contrato, direção local de planejamento e proposta que depende

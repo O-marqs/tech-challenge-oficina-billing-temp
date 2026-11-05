@@ -1,0 +1,47 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "oficina-billing"
+version = "0.1.0"
+description = "Billing participant for the Oficina Phase 4 Saga"
+requires-python = ">=3.11"
+dependencies = [
+  "fastapi>=0.135,<1", "uvicorn>=0.41,<1", "sqlalchemy>=2.0,<3",
+  "alembic>=1.18,<2", "psycopg[binary]>=3.3,<4", "boto3>=1.42,<2",
+  "httpx>=0.28,<1", "PyJWT[crypto]>=2.12,<3", "jsonschema>=4.26,<5",
+  "pydantic-settings>=2.12,<3", "referencing>=0.37,<1",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=9,<10", "pytest-cov>=7,<8", "ruff>=0.15,<1", "moto[sqs]>=5,<6", "bandit>=1.9,<2", "pip-audit>=2.10,<3"]
+
+[project.scripts]
+billing = "billing_service.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["billing_service*"]
+
+[tool.setuptools.package-data]
+billing_service = ["contracts/schemas/*.json", "contracts/schemas/comandos/*.json", "contracts/schemas/respostas/*.json"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra --strict-markers"
+markers = ["postgres: requires TEST_DATABASE_URL pointing to a dedicated PostgreSQL test database"]
+
+[tool.coverage.run]
+source = ["billing_service"]
+omit = ["billing_service/cli.py"]
+
+[tool.coverage.report]
+show_missing = true
+fail_under = 80
+
+[tool.ruff]
+target-version = "py311"
+line-length = 100
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]
