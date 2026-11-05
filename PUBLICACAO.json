@@ -67,6 +67,8 @@
     "write_status": "branch created successfully through GitHub integration",
     "bootstrap_commit": "cf141eb2bc6e41f7782bee638c8f4d1fcb68bbab",
     "canonical_development_source": "Git files on the documentation branch",
-    "destination": "helyomendesdev/tech-challenge-oficina-billing"
+    "destination": "helyomendesdev/tech-challenge-oficina-billing",
+    "documentation_commit": "5b4d88a5570917734fe927673e9424a42a9eddb1",
+    "pull_request": "https://github.com/O-marqs/tech-challenge-oficina-billing-temp/pull/1"
   }
 }

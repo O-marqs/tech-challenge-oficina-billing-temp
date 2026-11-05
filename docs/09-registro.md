@@ -38,3 +38,9 @@ instruções de migração e distinção entre temporário e destino.
 O destino do Hélio segue inalterado. Nenhum serviço, workflow ou recurso pago foi criado.
 Os HEADs main de OS, Saga, Auth e Execution foram reconfirmados para integração futura.
 Estado funcional permanece NÃO INICIADO; nenhuma suíte de Billing foi executada.
+
+Publicação documental confirmada: commit `5b4d88a5570917734fe927673e9424a42a9eddb1`,
+13 arquivos (12 Markdown e PUBLICACAO.json), branch `docs/fase4-lucas-planejamento`.
+[PR #1 em rascunho](https://github.com/O-marqs/tech-challenge-oficina-billing-temp/pull/1),
+sem merge. Árvore remota e leitura de AGENTS.md conferidas após publicação.
+Verificação local: links internos e whitespace válidos; nenhuma alegação de teste funcional.
